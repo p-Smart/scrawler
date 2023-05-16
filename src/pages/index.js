@@ -9,13 +9,22 @@ import axios from 'axios'
 
 
 
+const dateOptions = {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true,
+};
+
 
 
 export default function Home() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const clientLogos = [{image: '/assets/images/slack.png'},{image: '/assets/images/amazon.png'},{image: '/assets/images/spotify.png'},{image: '/assets/images/air-bnb.png'}]
-  const dateOptions = {weekday: 'long',day: 'numeric',month: 'long',year: 'numeric',}
   const [loading, setLoading] = useState(false)
   const [recentlyScrapedSites, setRecentlyScrapedSites] = useState([])
 
@@ -150,7 +159,20 @@ export default function Home() {
                     <Typography variant="subtitle1">URL: { url }</Typography>
                     <Typography variant="subtitle1" sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                       <Box sx={{color: 'primary.main'}}><AiOutlineClockCircle/></Box>
-                      {new Date(date_scraped).toLocaleDateString('en-GB', dateOptions)}
+                      <Box>
+                      {
+                      (() => {
+                        const date = new Date(date_scraped).toLocaleDateString('en-GB', dateOptions).split('at')[0];
+                        const time = new Date(date_scraped).toLocaleDateString('en-GB', dateOptions).split('at')[1];
+                        return (
+                          <>
+                            <Box>{date}</Box>
+                            <Box>{time}</Box>
+                          </>
+                        );
+                      })()
+                    }
+                    </Box>
                     </Typography>
                   </CardContent>
                 </Card>
