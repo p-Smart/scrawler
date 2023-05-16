@@ -1,0 +1,28 @@
+@media (max-width: 1250px) {
+    .homepage .home-banner .header{ font-size: 1.2em;}
+    .homepage .home-banner .main-right .image-wrapper{ width: 450px; height: 400px;}
+}
+
+@media (max-width: 996px) {
+    .homepage .home-banner .header{ font-size: 1.1em;}
+    .homepage .home-banner .main-right .image-wrapper{ width: 400px; height: 450px;}
+    .homepage .home-banner .design {height: 165px; transform: skewY(-9.5deg);}
+}
+
+
+@media (max-width: 756px) {
+    .MuiDrawer-root{ display: block; }
+    .lp-layout header{ padding: 0 20px; }
+    .lp-layout header nav{display: none;}
+    .lp-layout header > :nth-child(2){ display: none; }
+    .lp-layout header .logo-nav{ width: 100%; justify-content: space-between; }
+    .lp-layout header .logo-nav .mobile-drawer-icon{display: block;}
+    .homepage .home-banner .header{ font-size: .9em;}
+    .homepage .home-banner{ height: 650px; align-items: center; padding: 0 10px; flex-direction: column; justify-content: center; gap: 50px;}
+    .homepage .home-banner .main-left{max-width: unset;}
+    .homepage .home-banner .main-right .image-wrapper{ display: none; }
+    .homepage .home-banner .design { transform: skewY(-4.5deg); }
+    .homepage .home-banner .client-logos .image-wrapper{ display: flex; align-items: center; justify-content: center; }
+    .homepage .home-banner .client-logos{ left: 8%; }
+}
+
