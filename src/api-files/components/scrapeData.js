@@ -6,6 +6,7 @@ import scrapeImages from './scrapeImages'
 import scrapeLinks from './scrapeLinks'
 import getPageTitle from './scrapePageTitle'
 import error from './cusomError'
+import saveNewScraped from './saveNewScraped'
 const pup = puppeteer
 // pup.use(StealthPlugin())
 
@@ -54,6 +55,8 @@ const scrapeData = async (url) => {
         const imgSrcs = await scrapeImages(page)
 
         const pageLinks = await scrapeLinks(page)
+
+        const savedResult = await saveNewScraped(url, snapshotSrcs[0], pageTitle)
 
         return {
             title: pageTitle,

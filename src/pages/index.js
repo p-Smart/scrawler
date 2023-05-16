@@ -1,70 +1,49 @@
 import Layout from '@/layouts/landing-layout'
-import { Box, Button, Card, CardContent, CardHeader, CardMedia, Container, Grid, TextField, Tooltip, Typography } from '@/mui'
+import { Box, Button, Card, CardContent, CardHeader, CardMedia, Container, Grid, Skeleton, TextField, Tooltip, Typography } from '@/mui'
 import Head from 'next/head'
 import Image from 'next/image'
 import {useRouter} from 'next/router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {AiOutlineClockCircle} from 'react-icons/ai'
+import axios from 'axios'
+
+
+
+
+
 export default function Home() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const clientLogos = [{image: '/assets/images/slack.png'},{image: '/assets/images/amazon.png'},{image: '/assets/images/spotify.png'},{image: '/assets/images/air-bnb.png'}]
-  const recentSearches = [
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-    {
-      snapshot: '/assets/images/pSmart-website.png',
-      title: 'pSmart Website',
-      url: 'https://smartfigures.vercel.app',
-      timestamp: '2023-05-20T10:30:00.000Z',
-    },
-  ];
   const dateOptions = {weekday: 'long',day: 'numeric',month: 'long',year: 'numeric',}
+  const [loading, setLoading] = useState(false)
+  const [recentlyScrapedSites, setRecentlyScrapedSites] = useState([])
 
 
   const handleSearch = () => {
     router.push(`/crawl?url=${searchQuery}`)
   }
+
+  const handleRecentSearchesClick = (e) => {
+    const url = e.target.closest('.MuiPaper-root').ariaLabel
+    router.push(`/crawl?url=${url}`)
+  }
+
+  useEffect( () => {
+    (async () => {
+      try{
+        setLoading(true)
+        const {data} = await axios.get('/api/fetch-recent-scrapes')
+        setRecentlyScrapedSites(data.data)
+      }
+      catch(err){
+        console.log(err.message)
+      }
+      finally{
+        setLoading(false)
+      }
+    })()
+  }, [] )
 
   return (
     <Layout>
@@ -132,30 +111,46 @@ export default function Home() {
       >
         <CardHeader title={<Typography variant="h5" sx={{ color: 'primary.main' }}>Recent Searches</Typography>} />
         <CardContent >
-        {recentSearches.length > 0 ? (
-          <Grid container spacing={5}>
-            {recentSearches.map((search, k) => (
+        {!loading ? (
+          <Grid container spacing={5} sx={{justifyContent: 'center'}}>
+            {recentlyScrapedSites.map(({page_title, url, snapshot, date_scraped}, k) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={k}>
-                <Card sx={{cursor: 'pointer'}}>
-                <Box sx={{height: 300, overflow: 'hidden'}}>
-                  <CardMedia 
-                  sx={{
-                    height: 'inherit',
-                    transition: 'transform 0.3s ease',
-                    '&:hover': {
-                      transform: 'scale(1.2)'
-                    },
+                <Card 
+                sx={{cursor: 'pointer'}}
+                aria-label={url} 
+                onClick={handleRecentSearchesClick}
+                >
+                <Box sx={{
+                  height: 300, 
+                  overflow: 'hidden', 
+                  backgroundColor: 'neutral.700',
                   }}
-                   image={search.snapshot} 
-                   title='Website Snapshot'
-                   />
-                   </Box>
+                >
+                {
+                  !loading ? (
+                    <CardMedia 
+                    sx={{
+                      height: 300,
+                      transition: 'transform 0.3s ease',
+                      '&:hover': {
+                        transform: 'scale(1.2)'
+                      },
+                      backgroundSize: 'contain'
+                    }}
+                    image={snapshot}
+                    title='Website Snapshot'
+                    />
+                  ) : (
+                    <Skeleton sx={{width: '100%', height: '100%', bgcolor:'neutral.300'}} />
+                  )
+                }
+                  </Box>
                   <CardContent sx={{backgroundColor: 'secondary.light', display: 'flex', flexDirection: 'column', gap: 1}}>
-                    <Typography variant="subtitle1">Title: {search.title}</Typography>
-                    <Typography variant="subtitle1">URL: {search.url}</Typography>
+                    <Typography variant="subtitle1">Title: {page_title}</Typography>
+                    <Typography variant="subtitle1">URL: { url }</Typography>
                     <Typography variant="subtitle1" sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                       <Box sx={{color: 'primary.main'}}><AiOutlineClockCircle/></Box>
-                      {new Date(search.timestamp).toLocaleDateString('en-GB', dateOptions)}
+                      {new Date(date_scraped).toLocaleDateString('en-GB', dateOptions)}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -163,7 +158,32 @@ export default function Home() {
             ))}
           </Grid>
           ) : (
-            <Typography variant="body1">No recent searches found.</Typography>
+            <Grid container spacing={5} sx={{justifyContent: 'center'}}>
+            {[...Array(8)].map((_, k) => (
+              <Grid item xs={12} sm={6} md={4} lg={3} key={k}>
+                <Card sx={{cursor: 'pointer'}}>
+                <Box sx={{
+                  height: 50, 
+                  overflow: 'hidden', 
+                  backgroundColor: 'neutral.700',
+                  display: 'flex',
+                  alignItems: 'center'
+                  }}
+                >
+                    <Skeleton sx={{width: '100%', height: '100%', bgcolor:'neutral.300'}} />
+                  </Box>
+                  <CardContent sx={{backgroundColor: 'secondary.light', display: 'flex', flexDirection: 'column', gap: 1}}>
+                    <Typography variant="subtitle1">Title: <Skeleton /> </Typography>
+                    <Typography variant="subtitle1">URL: <Skeleton /> </Typography>
+                    <Typography variant="subtitle1" sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
+                      <Box sx={{color: 'primary.main'}}><AiOutlineClockCircle/></Box>
+                      <Skeleton sx={{width: 50}} />
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
           )}
         </CardContent>
       </Card>

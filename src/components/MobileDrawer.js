@@ -10,9 +10,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import {MdHome} from 'react-icons/md'
 import {AiOutlineCloseCircle} from 'react-icons/ai'
-import { nav } from '@/datas/nav';
+import { nav, nav1 } from '@/datas/nav';
+import {useRouter} from 'next/router'
+import Link from 'next/link'
 
 function TemporaryDrawer({open, setOpen}) {
+  const router = useRouter()
 
   const toggleDrawer = (open) => (event) => {
     // if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -30,27 +33,22 @@ function TemporaryDrawer({open, setOpen}) {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        {nav.map(({title, route}, k) => (
-          <ListItem key={k} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <MdHome size={18}/>
-              </ListItemIcon>
-              <ListItemText primary={title} />
-            </ListItemButton>
-          </ListItem>
+        {nav.map(({title, route, Icon}, k) => (
+          <Link href={route} key={k}>
+              <Button sx={{display: 'flex', gap: 3, color: router.pathname===route ? '' : 'neutral.900'}}>
+              {<Icon />}{title}
+              </Button>
+          </Link>
         ))}
       </List>
       <Divider />
-      {['Login', 'Register'].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <MdHome size={18}/>
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
+      {nav1
+      .map(({route, title, Icon}, k) => (
+        <Link href={route} key={k}>
+            <Button sx={{display: 'flex', gap: 3, color: router.pathname===route ? '' : 'neutral.900'}}>
+            {<Icon />}{title}
+            </Button>
+        </Link>
         ))}
     </Box>
   );

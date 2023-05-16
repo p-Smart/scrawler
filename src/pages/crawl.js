@@ -215,7 +215,7 @@ const Page = () => {
                     <Card sx={{my: 5}}>
                         <CardHeader sx={{backgroundColor: 'neutral.800', mb: 3}} title={<Typography variant="h5" sx={{color: 'neutral.200' }}>
                             Page Links: &nbsp;&nbsp;&nbsp; 
-                            <Typography component='span'>Total ({pageLinks.length})</Typography>
+                            <Typography component='span'>Total ({!loading ? pageLinks.length : '...'})</Typography>
                         </Typography>} />
                         <CardContent>
                         <Grid container spacing={2} sx={{ mb: 2, justifyContent: 'center' }}>
@@ -243,13 +243,22 @@ const Page = () => {
                     <Card sx={{backgroundColor: 'neutral.800'}}>
                         <CardHeader title={<Typography variant='h5' color='neutral.200'>
                         Page Snapshots &nbsp;&nbsp;&nbsp;
-                        <Typography component='span'>Total ({pageSnapshots.length})</Typography>
+                        <Typography component='span'>Total ({!loading ? pageSnapshots.length : '...'})</Typography>
                         </Typography>} />
                         <Grid container spacing={2} sx={{justifyContent: 'center', pb: 3, px: 3}}>
                         {
                             !loading ? (
                             pageSnapshots.map( (snapshot, k) => (
+
                                 <Grid key={k} item xs={12} sm={6} md={4} lg={3}>
+                                <Card>
+                                <Box
+                                sx={{
+                                height: 300, 
+                                overflow: 'hidden', 
+                                backgroundColor: 'neutral.200',
+                                }}
+                                >
                                 <CardMedia
                                 component="img"
                                 src={snapshot}
@@ -259,9 +268,15 @@ const Page = () => {
                                     boxShadow: 1,
                                     width: 300,
                                     height: 300,
-                                    objectFit: 'cover'
+                                    transition: 'transform 0.3s ease',
+                                    '&:hover': {
+                                    transform: 'scale(1.2)'
+                                    },
+                                    objectFit: 'contain'
                                 }}
                                 />
+                                </Box>
+                                </Card>
                                 </Grid>
                             ) )
                             ) : (
@@ -283,7 +298,7 @@ const Page = () => {
                         title={
                         <Typography variant='h5'>
                         Page Images &nbsp;&nbsp;&nbsp;
-                        <Typography component='span'>Total ({pageImages.length})</Typography>
+                        <Typography component='span'>Total ({!loading ? pageImages.length : '...'})</Typography>
                         </Typography>} 
                         />
                         <CardContent sx={{backgroundColor: 'neutral.800'}}>

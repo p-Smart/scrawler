@@ -8,7 +8,7 @@ const ScrapePage = async ({body, query, ...req}, res) => {
         if(req.method !== 'POST'){
             error('Only POST Requests', 404)
         }
-        const scrapedData = await scrapeData(body.url || query.url)
+        const scrapedData = await scrapeData(body.url)
 
         res.json({
             success: true,

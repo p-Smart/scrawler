@@ -23,9 +23,11 @@ const Layout = ({children}) => {
             <TemporaryDrawer open={openMobileDrawer} setOpen={setOpenMobileDrawer}/>
             <header>
                 <Box sx={{...dfaj}} className='logo-nav'>
+                    <Link href='/'>
                     <Box className="logo">
                         <img src='/scrawler-logo.png'/>
                     </Box>
+                    </Link>
                     <Box className="mobile-drawer-icon" sx={{cursor: 'pointer', color:'neutral.900'}}>
                         <AiOutlineMenuUnfold  size={24} onClick={() => setOpenMobileDrawer(true)}/>
                     </Box>
