@@ -31,5 +31,8 @@
     "puppeteer-extra-plugin-user-preferences": "^2.4.1",
     "debug": "^4.3.4",
     "browserless": "^9.10.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
