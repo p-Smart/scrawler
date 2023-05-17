@@ -26,4 +26,4 @@ Please note that web scraping should be used responsibly and in accordance with 
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is NOT licensed under anything. LOL🤣 [MIT License](LICENSE).
