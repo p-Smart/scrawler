@@ -14,7 +14,7 @@ Scrawler is a powerful web scraping tool built with Next.js and Puppeteer.js. It
 2. Enter a valid URL of the web page you want to scrape in the input field.
 3. Click on the "Scrape" button to initiate the scraping process.
 4. Scrawler will retrieve the page's title, links, and images, displaying the results for your analysis.
-5. If desired, click on the "Capture Screenshot" button to take a screenshot of the web page.
+5. Scrawler will also take screenshots of the web page.
 
 ## Deployment
 
