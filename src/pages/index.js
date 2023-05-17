@@ -6,6 +6,7 @@ import {useRouter} from 'next/router'
 import { useEffect, useState } from 'react'
 import {AiOutlineClockCircle} from 'react-icons/ai'
 import axios from 'axios'
+import { useBreakpoints } from '@/mui/mediaQuery'
 
 
 
@@ -22,9 +23,26 @@ const dateOptions = {
 
 
 export default function Home() {
+  const { xs, sm, md, lg, xl } = useBreakpoints();
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
-  const clientLogos = [{image: '/assets/images/slack.png'},{image: '/assets/images/amazon.png'},{image: '/assets/images/spotify.png'},{image: '/assets/images/air-bnb.png'}]
+  const clientLogos = [
+    {
+      image: '/assets/icons/react.svg',
+      title: 'React.js'
+    },
+    {
+      image: '/assets/icons/next.svg',
+      title: 'Next.js'
+    },
+    {
+      image: '/assets/icons/puppeteer.svg',
+      title: 'Puppeteer.js'
+    },
+    {
+      image: '/assets/icons/mongodb.svg',
+      title: 'MongoDB'
+    }]
   const [loading, setLoading] = useState(false)
   const [recentlyScrapedSites, setRecentlyScrapedSites] = useState([])
 
@@ -93,12 +111,24 @@ export default function Home() {
             </Box>
           </Box>
 
-          <Box className="client-logos">
-          <Grid container>
-          {clientLogos.map( ({image}, k) => (
-            <Grid item xs={6} sm={3} md={3} key={k}>
-            <Box className="image-wrapper">
-              <img src={image} alt='clients logo' />
+          <Box
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            zIndex: 3,
+            right: {lg: '10%', md: '2%', sm: '1%'}
+          }}
+          >
+          <Grid container spacing={xs ? 3 : 0}>
+          {clientLogos.map( ({image, title}, k) => (
+            <Grid item xs={3} key={k}>
+            <Box>
+              <img
+              src={image}
+              alt={title} 
+              width={xs ? 60 : sm ? 100 : lg ? 150 : 150}
+              height={70} 
+              />
             </Box>
             </Grid>
           ))}
