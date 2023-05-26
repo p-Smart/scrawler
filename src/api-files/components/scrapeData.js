@@ -47,9 +47,7 @@ const scrapeData = async (url) => {
         }
 
         const pageTitle = await getPageTitle(page)
-
-        // Take Page Snapshot
-        // const screenshotData = await page.screenshot({ encoding: 'base64' });
+        
         const snapshotSrcs = await takeFullPageScreenshots(page, viewportHeight)
 
         const imgSrcs = await scrapeImages(page)
