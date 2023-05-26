@@ -13,6 +13,7 @@ const takeFullPageScreenshots = async (page, viewportHeight) => {
     let scrollHeight = viewportHeight;
 
     while (scrollHeight < totalHeight) {
+      console.log(scrollHeight)
 
       await page.evaluate((height) => {
         window.scrollBy(0, height);
@@ -21,9 +22,9 @@ const takeFullPageScreenshots = async (page, viewportHeight) => {
       await page.waitForTimeout(500);
   
       screenshot = await page.screenshot({ encoding: 'base64' });
-      if (screenshots.includes(screenshot)) continue
-      
-      screenshots.push(screenshot)
+      if (!screenshots.includes(screenshot)){
+        screenshots.push(screenshot)
+      }
 
       scrollHeight += viewportHeight;
     }

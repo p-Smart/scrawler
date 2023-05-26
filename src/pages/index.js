@@ -185,7 +185,16 @@ export default function Home() {
                 }
                   </Box>
                   <CardContent sx={{backgroundColor: 'secondary.light', display: 'flex', flexDirection: 'column', gap: 1}}>
-                    <Typography variant="subtitle1">Title: {page_title}</Typography>
+                    <Typography variant="subtitle1" sx={{display: 'flex', gap: 1}}>
+                      Title:
+                      <Box 
+                      sx={{
+                        color: 'primary.main',
+                        }}
+                      >
+                      {page_title}
+                      </Box>
+                    </Typography>
                     <Typography variant="subtitle1">URL: { url }</Typography>
                     <Typography variant="subtitle1" sx={{display: 'flex', gap: 1, alignItems: 'center'}}>
                       <Box sx={{color: 'primary.main'}}><AiOutlineClockCircle/></Box>

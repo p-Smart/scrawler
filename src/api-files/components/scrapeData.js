@@ -1,14 +1,11 @@
-import puppeteer from 'puppeteer-core'
-// import {executablePath} from 'puppeteer'
-// import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 import takeFullPageScreenshots from './takeScreenshot'
 import scrapeImages from './scrapeImages'
 import scrapeLinks from './scrapeLinks'
 import getPageTitle from './scrapePageTitle'
 import error from './cusomError'
 import saveNewScraped from './saveNewScraped'
-const pup = puppeteer
-// pup.use(StealthPlugin())
+import connToPuppeteer from '../config/pupConnect'
+
 
 const isValidUrl = (url) => {
     try {
@@ -18,24 +15,14 @@ const isValidUrl = (url) => {
       return false;
     }
 }
-const {BROWSERLESS_KEY} = process.env
 
 
 const scrapeData = async (url) => {
     try{
         !isValidUrl(url) && error('Invalid URL')
-        const viewportHeight = 732
-        // var browser = await pup.launch({
-        //     headless: 'new',
-        //     executablePath: executablePath()
-        // })
-        var browser = await pup.connect({
-            browserWSEndpoint: `wss://chrome.browserless.io?token=${BROWSERLESS_KEY}`,
-            defaultViewport: { width: 1500, height: viewportHeight },
-            args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        }, {timeout: 0})
-        var page = await browser.newPage()
-        // await page.setViewport({ width: 1500, height: viewportHeight });
+
+        var {browser, page, viewportHeight} = await connToPuppeteer()
+
         await page.goto(url, {timeout: 0})
         try{
             await page.waitForSelector('*')
@@ -47,7 +34,7 @@ const scrapeData = async (url) => {
         }
 
         const pageTitle = await getPageTitle(page)
-        
+
         const snapshotSrcs = await takeFullPageScreenshots(page, viewportHeight)
 
         const imgSrcs = await scrapeImages(page)
@@ -64,12 +51,13 @@ const scrapeData = async (url) => {
         }
     }
     catch(err){
+        console.log(err)
         err.message = err.message.includes('connect ETIMEDOUT') ? 'Sever Connection Timeout, try again' : err.message
         throw new Error(err.message)
     }
     finally{
-        await page?.close()
-        await browser?.close()
+        // await page?.close()
+        // await browser?.close()
     }
 }
 
